@@ -1,0 +1,103 @@
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #1a472a;  /* Dark green background */
+  padding: 20px;
+}
+
+.card {
+  width: 240px;
+  height: 336px;  /* Standard playing card ratio 2.5:3.5 */
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.cardInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.card.flipped .cardInner {
+  transform: rotateY(180deg);
+}
+
+.cardBack, .cardFront {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 10px;
+}
+
+.cardBack {
+  background-color: #2d5a3c;  /* Slightly lighter green for the card back */
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.1) 0px,
+    rgba(0, 0, 0, 0.1) 2px,
+    transparent 2px,
+    transparent 4px
+  ),
+  repeating-linear-gradient(
+    -45deg,
+    rgba(0, 0, 0, 0.1) 0px,
+    rgba(0, 0, 0, 0.1) 2px,
+    transparent 2px,
+    transparent 4px
+  );
+}
+
+.cardFront {
+  background: white;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+}
+
+.cardCorner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.bottomRight {
+  align-self: flex-end;
+  transform: rotate(180deg);
+}
+
+.cardCenter {
+  font-size: 72px;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .card {
+    width: 200px;
+    height: 280px;
+  }
+
+  .cardCorner {
+    font-size: 20px;
+  }
+
+  .cardCenter {
+    font-size: 60px;
+  }
+} 
