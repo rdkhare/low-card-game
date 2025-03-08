@@ -183,7 +183,7 @@ export default function Home() {
         {isCompetitiveMode && baseCard && (
           <div className={`${styles.previousCard} ${isFlipped ? styles.flipped : ''}`}>
             <div className={styles.cardInner}>
-              {renderCard(baseCard, true)}
+              {renderCard(baseCard)}
             </div>
           </div>
         )}
