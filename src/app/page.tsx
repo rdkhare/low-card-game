@@ -164,7 +164,7 @@ export default function Home() {
           <span className={styles.slider}></span>
         </label>
         <span className={styles.modeLabel}>
-          {isCompetitiveMode ? 'Competitive Mode' : 'Casual Mode'}
+          {isCompetitiveMode ? 'Degen Mode' : 'Casual Mode'}
         </span>
       </div>
 
