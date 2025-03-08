@@ -1,43 +1,82 @@
 .main {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   background-color: #1a472a;  /* Dark green background */
   padding: 20px;
+  position: relative;
+}
+
+.scoreBoard {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 24px;
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.handicap {
+  color: #fbbf24;
+  font-size: 0.9em;
+}
+
+.cardContainer {
+  position: relative;
+  width: 500px;
+  height: 700px;
+  margin: 20px 0;
+  transform-style: preserve-3d;
+  perspective: 2000px;
 }
 
 .card {
-  width: 500px;  /* Increased from 300px */
-  height: 700px;  /* Increased from 420px, maintaining 2.5:3.5 ratio */
+  width: 500px;
+  height: 700px;
   perspective: 1000px;
   cursor: pointer;
+  position: relative;
+  z-index: 2;
 }
 
-.cardInner {
+.previousCard {
+  position: absolute;
+  width: 500px;
+  height: 700px;
+  left: -80px;
+  top: 20px;
+  z-index: 1;
+  opacity: 0.7;
+  filter: blur(1px) brightness(0.9);
+  transform: translateX(-10px) translateY(-10px);
+  pointer-events: none;
+  perspective: 1000px;
+}
+
+.previousCard .cardInner {
   position: relative;
   width: 100%;
   height: 100%;
   text-align: center;
   transition: transform 0.6s;
   transform-style: preserve-3d;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);  /* Increased shadow for larger card */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.card.flipped .cardInner {
+.previousCard.flipped .cardInner {
   transform: rotateY(180deg);
 }
 
-.cardBack, .cardFront {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  border-radius: 16px;  /* Increased from 10px for larger card */
-}
-
-.cardBack {
-  background-color: #2d5a3c;  /* Slightly lighter green for the card back */
+.previousCard .cardBack {
+  background-color: #2d5a3c;
   background-image: repeating-linear-gradient(
     45deg,
     rgba(0, 0, 0, 0.1) 0px,
@@ -51,7 +90,52 @@
     rgba(0, 0, 0, 0.1) 3px,
     transparent 3px,
     transparent 6px
-  );  /* Increased pattern size */
+  );
+}
+
+.previousCard .cardFront {
+  transform: rotateY(180deg);
+  background: #ffffff;
+}
+
+.cardInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.card.flipped .cardInner {
+  transform: rotateY(180deg);
+}
+
+.cardBack, .cardFront {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 16px;
+}
+
+.cardBack {
+  background-color: #2d5a3c;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.1) 0px,
+    rgba(0, 0, 0, 0.1) 3px,
+    transparent 3px,
+    transparent 6px
+  ),
+  repeating-linear-gradient(
+    -45deg,
+    rgba(0, 0, 0, 0.1) 0px,
+    rgba(0, 0, 0, 0.1) 3px,
+    transparent 3px,
+    transparent 6px
+  );
 }
 
 .cardFront {
@@ -60,7 +144,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 25px;  /* Increased from 15px */
+  padding: 25px;
   font-family: 'Arial', sans-serif;
   font-weight: bold;
 }
@@ -69,7 +153,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  font-size: 52px;  /* Increased from 32px */
+  font-size: 52px;
   line-height: 1;
 }
 
@@ -79,25 +163,187 @@
 }
 
 .cardCenter {
-  font-size: 160px;  /* Increased from 96px */
+  font-size: 160px;
   flex-grow: 1;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+.buttonContainer {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.lossButton, .winButton {
+  padding: 15px 40px;
+  font-size: 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.lossButton {
+  background-color: #dc2626;
+  color: white;
+}
+
+.winButton {
+  background-color: #059669;
+  color: white;
+}
+
+.lossButton:hover:not(:disabled), 
+.winButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.lossButton:active:not(:disabled), 
+.winButton:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.lossButton:disabled,
+.winButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 /* Responsive design */
 @media (max-width: 480px) {
-  .card {
-    width: 320px;  /* Increased from 250px */
-    height: 448px;  /* Increased from 350px, maintaining ratio */
+  .cardContainer {
+    width: 320px;
+    height: 448px;
+  }
+
+  .card, .previousCard {
+    width: 320px;
+    height: 448px;
+  }
+
+  .previousCard {
+    left: -60px;
+    top: 15px;
   }
 
   .cardCorner {
-    font-size: 36px;  /* Increased from 28px */
+    font-size: 36px;
   }
 
   .cardCenter {
-    font-size: 120px;  /* Increased from 80px */
+    font-size: 120px;
+  }
+
+  .buttonContainer {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .lossButton, .winButton {
+    padding: 12px 30px;
+    font-size: 18px;
+  }
+
+  .scoreBoard {
+    font-size: 20px;
+    padding: 8px 16px;
+  }
+}
+
+.modeToggle {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modeLabel {
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Toggle switch styles */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #059669;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+/* Update responsive design for mode toggle */
+@media (max-width: 480px) {
+  .modeToggle {
+    top: 15px;
+    left: 15px;
+  }
+
+  .modeLabel {
+    font-size: 14px;
+  }
+
+  .switch {
+    width: 50px;
+    height: 28px;
+  }
+
+  .slider:before {
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(22px);
   }
 } 
