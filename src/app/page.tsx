@@ -133,7 +133,7 @@ export default function Home() {
     return suit === 'hearts' || suit === 'diamonds' ? 'red' : 'black';
   };
 
-  const renderCard = (card: Card, isShadow = false) => (
+  const renderCard = (card: Card) => (
     <>
       <div className={styles.cardBack} />
       <div className={styles.cardFront} style={{ color: getSuitColor(card.suit) }}>
